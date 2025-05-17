@@ -25,7 +25,7 @@ def stream_users_in_batches(batch_size):
 def batch_processing(batch_size):
     for row in stream_users_in_batches(batch_size):
         if row['age'] > 25:
-            print(row)
+            return row
             
 if __name__ == "__main__":
     data = batch_processing(50)
