@@ -52,7 +52,7 @@ Bob,bob@example.com,35
 Update `setup_database.py` with your MySQL credentials, then run:
 
 ```bash
-python setup_database.py
+python seed.py
 ```
 
 ## ✍️ Author
