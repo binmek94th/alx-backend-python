@@ -1,10 +1,11 @@
 import sqlite3
 import functools
+from datetime import datetime
 
 def log_queries(func):
     def wrapper(*args, **kwargs):
-        print(f"Calling {func.__name__} with {args} and {kwargs}")
-        result =func(*args, **kwargs)
+        print(f"Calling {func.__name__} with {args} and {kwargs} at {datetime.now()}")
+        result = func(*args, **kwargs)
         return result
     
     return wrapper
