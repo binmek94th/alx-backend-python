@@ -1,1 +1,5 @@
 .venv
+users.db
+messaging_app/messaging_app/__pycache__/
+messaging_app/.idea
+messaging_app/chats/__pycache__
