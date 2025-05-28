@@ -1,3 +1,14 @@
-from django.shortcuts import render
+from rest_framework.viewsets import ModelViewSet
 
-# Create your views here.
+from chats.models import Conversation, Message
+from chats.serializers import ConversationSerializer, MessageSerializer
+
+
+class ConversationViewSet(ModelViewSet):
+    queryset = Conversation.objects.all()
+    serializer_class = ConversationSerializer
+
+
+class MessageViewSet(ModelViewSet):
+    queryset = Message.objects.all()
+    serializer_class = MessageSerializer
