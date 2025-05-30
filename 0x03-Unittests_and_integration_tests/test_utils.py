@@ -28,7 +28,7 @@ from unittest.mock import patch
 
 
 class TestGetJson(unittest.TestCase):
-    @patch("requests.get")
+    @patch("utils.requests.get")  
     def test_get_json(self, mock_get):
         payload = {"payload": True}
         mock_get.return_value.json.return_value = payload
