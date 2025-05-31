@@ -79,5 +79,3 @@ class TestGithubOrgClient(unittest.TestCase):
         """Test has_license returns correct boolean"""
         result = GithubOrgClient.has_license(repo, license_key)
         self.assertEqual(result, expected)
-
-
