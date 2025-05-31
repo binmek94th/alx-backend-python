@@ -43,6 +43,9 @@ class TestGithubOrgClient(unittest.TestCase):
             )
 
     def test_public_repos(self):
+        """
+        Test that _public_repos returns the correct repo.
+        """
         with patch('client.get_json') as mock_get_json:
             mock_get_json.return_value = {
                 "repos_url": "https://api.github.com/orgs/test/repos"
