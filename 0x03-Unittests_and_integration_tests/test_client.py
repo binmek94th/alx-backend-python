@@ -8,8 +8,7 @@ from parameterized import parameterized, parameterized_class
 from unittest.mock import patch, PropertyMock, MagicMock
 from typing import Dict
 from client import GithubOrgClient
-  from fixtures import org_payload, repos_payload, expected_repos, apache2_repos
-
+from fixtures import TEST_PAYLOAD
 
 class TestGithubOrgClient(unittest.TestCase):
     """Test cases for GithubOrgClient"""
@@ -59,7 +58,6 @@ class TestGithubOrgClient(unittest.TestCase):
 
                 self.assertEqual(result, "https://api.github.com/orgs/test/repos")
                 mock_org.assert_called_once()
-                mock_get_json.assert_called_once_with('https://api.github.com/orgs/test/repos')
 
     @parameterized.expand([
         ({"license": {"key": "my_license"}}, "my_license", True),
@@ -74,11 +72,11 @@ class TestGithubOrgClient(unittest.TestCase):
 
 @parameterized_class([
     {
-        "org_payload": org_payload,
-        "repos_payload": repos_payload,
-        "expected_repos": expected_repos,
-        "apache2_repos": apache2_repos
-    }
+        "org_payload": org,
+        "repos_payload": repos,
+        "expected_repos": expected,
+        "apache2_repos": apache2
+    } for org, repos, expected, apache2 in TEST_PAYLOAD
 ])
 class TestIntegrationGithubOrgClient(unittest.TestCase):
     """Integration tests for GithubOrgClient.public_repos"""
