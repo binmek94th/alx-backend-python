@@ -27,7 +27,7 @@ from client import GithubOrgClient
 
 class TestGithubOrgClient(unittest.TestCase):
     """
-    Unit tests for the GithubOrgClient class.
+    Unit tests for the GithubOrgClient class, this test inlcude testing repo and get_json.
     """
     @parameterized.expand([
         ("google",),
