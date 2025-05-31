@@ -10,6 +10,7 @@ from typing import Dict
 from client import GithubOrgClient
 from fixtures import TEST_PAYLOAD
 
+
 class TestGithubOrgClient(unittest.TestCase):
     """Test cases for GithubOrgClient"""
     @parameterized.expand(['google', 'abc'])
