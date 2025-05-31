@@ -10,6 +10,9 @@ from client import GithubOrgClient
 
 
 class TestGithubOrgClient(unittest.TestCase):
+    """
+    Unit tests for the GithubOrgClient class.
+    """
 
     @parameterized.expand(['google', 'abc'])
     @patch('client.get_json')
@@ -40,31 +43,25 @@ class TestGithubOrgClient(unittest.TestCase):
                 "https://api.github.com/orgs/check/"
             )
 
-    def test_public_repos(self):
+    @patch('client.get_json')
+    def test_public_repos(self, mock_get_json):
         """
-        Test that _public_repos_url is used to fetch public repos.
+        Test that public_repos returns the correct list of repo names.
         """
-        with patch('client.get_json') as mock_get_json:
-            mock_get_json.return_value = {
-                "repos_url": "https://api.github.com/orgs/test/repos"
-            }
-
-            with patch(
-                'client.GithubOrgClient.org',
-                new_callable=PropertyMock
-            ) as mock_org:
-                mock_org.return_value = {
-                    "repos_url": "https://api.github.com/orgs/test/repos"
-                }
-
-                client = GithubOrgClient("test")
-                result = client._public_repos_url
-
-                self.assertEqual(
-                    result,
-                    "https://api.github.com/orgs/test/repos"
-                )
-                mock_org.assert_called_once()
-                mock_get_json.assert_called_once_with(
-                    'https://api.github.com/orgs/test/repos'
-                )
+        payload = [
+            {"name": "repo1", "license": {"key": "harvard"}},
+            {"name": "repo2", "license": {"key": "microsoft"}}
+        ]
+        mock_get_json.return_value = payload
+        with patch(
+            'client.GithubOrgClient._public_repos_url',
+            new_callable=PropertyMock
+        ) as mock_url:
+            mock_url.return_value = "http://test-url"
+            client = GithubOrgClient("test")
+            self.assertEqual(
+                client.public_repos(),
+                ["repo1", "repo2"]
+            )
+            mock_url.assert_called_once()
+            mock_get_json.assert_called_once_with("http://test-url")
