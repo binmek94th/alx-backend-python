@@ -17,6 +17,10 @@ class TestGithubOrgClient(unittest.TestCase):
     @parameterized.expand(['google', 'abc'])
     @patch('client.get_json')
     def test_org(self, org_name, mock_get_json):
+        """
+        Test that GithubOrgClient.org returns correct org data and
+        calls get_json with the right URL.
+        """
         expected = {"login": org_name}
         mock_get_json.return_value = expected
 
