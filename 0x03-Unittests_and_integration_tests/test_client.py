@@ -69,3 +69,16 @@ class TestGithubOrgClient(unittest.TestCase):
             )
             mock_url.assert_called_once()
             mock_get_json.assert_called_once_with("http://test-url")
+
+
+    @parameterized.expand([
+        ({"license": {"key": "my_license"}}, "my_license", True),
+        ({"license": {"key": "other_license"}}, "my_license", False),
+        ({}, "my_license", False),  
+    ])
+    def test_has_license(self, repo, license_key, expected):
+        """Test static method has_license."""
+        result = GithubOrgClient.has_license(repo, license_key)
+        self.assertEqual(result, expected)
+
+
