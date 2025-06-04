@@ -3,13 +3,13 @@ from django.db import models
 import uuid
 
 class User(AbstractUser):
-    user_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     password = models.CharField(max_length=128, null=True, blank=True)
     email = models.EmailField(unique=True)
     first_name = models.CharField("First Name", max_length=255)
     last_name = models.CharField("Last Name", max_length=255)
     phone_number = models.CharField(max_length=15, blank=True, null=True)
-    age = models.DateField()
+    age = models.DateField(null=True)
 
 
 class Conversation(models.Model):
