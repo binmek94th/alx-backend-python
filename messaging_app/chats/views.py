@@ -2,7 +2,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.viewsets import ModelViewSet
 
 from chats.models import Conversation, Message
-from chats.permission import IsOwnerOrReadOnly, IsParticipant
+from chats.permissions import IsOwnerOrReadOnly, IsParticipant
 from chats.serializers import ConversationSerializer, MessageSerializer
 
 
