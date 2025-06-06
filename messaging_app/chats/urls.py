@@ -10,6 +10,9 @@ router.register(r'message', MessageViewSet)
 
 convo_router = NestedDefaultRouter(router, r'conversations', lookup='conversation')
 convo_router.register(r'messages', MessageViewSet, basename='conversation-messages')
+
 urlpatterns = [
     path('', include(router.urls)),
+    path('', include(convo_router.urls)),
 ]
+

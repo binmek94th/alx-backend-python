@@ -6,22 +6,38 @@ from .models import User, Conversation, Message
 class UsersSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['user_id', 'username', 'email', 'first_name', 'last_name', 'phone_number', 'age']
-        read_only_fields = ['user_id']
+        fields = ['id', 'username', 'email', 'first_name', 'last_name', 'phone_number', 'age']
+        read_only_fields = ['id']
 
 
-class ConversationSerializer(serializers.ModelSerializer):
+class ConversationViewSerializer(serializers.ModelSerializer):
+    participants = UsersSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = Conversation
+        fields = '__all__'
+        read_only_fields = ['conversation_id']
+
+
+class ConversationViewWithMessageSerializer(serializers.ModelSerializer):
     participants = UsersSerializer(many=True, read_only=True)
     messages = serializers.SerializerMethodField()
 
     class Meta:
-        model= Conversation
+        model = Conversation
         fields = '__all__'
         read_only_fields = ['conversation_id']
 
     def get_messages(self, obj):
         messages = obj.message_set.all()
         return MessageSerializer(messages, many=True).data
+
+
+class ConversationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Conversation
+        fields = '__all__'
+        read_only_fields = ['conversation_id']
 
 
 class MessageSerializer(serializers.ModelSerializer):

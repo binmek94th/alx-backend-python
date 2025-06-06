@@ -2,6 +2,7 @@ from django.contrib.auth.models import AbstractUser
 from django.db import models
 import uuid
 
+
 class User(AbstractUser):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     password = models.CharField(max_length=128, null=True, blank=True)
@@ -15,6 +16,9 @@ class User(AbstractUser):
 class Conversation(models.Model):
     conversation_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     participants = models.ManyToManyField(User, related_name='conversations')
+
+    def __str__(self):
+        return f"Conversation {self.conversation_id} with {self.participants.count()} participants"
 
 
 class Message(models.Model):
