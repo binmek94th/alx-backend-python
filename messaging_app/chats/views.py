@@ -1,5 +1,7 @@
+from rest_framework import status
 from rest_framework.exceptions import PermissionDenied
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 
 from chats.models import Conversation, Message
@@ -25,8 +27,11 @@ class ConversationViewSet(ModelViewSet):
             if conversation and self.request.user in conversation.participants.all():
                 return Message.objects.filter(conversation=conversation)
             else:
-                raise PermissionDenied("You are not a participant of this conversation.")
-        return Message.objects.none()
+                return Response(
+                    {"detail": "Forbidden: Not a participant of this conversation."},
+                    status=status.HTTP_403_FORBIDDEN
+                )
+        return None
 
 
 class MessageViewSet(ModelViewSet):
