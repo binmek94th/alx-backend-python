@@ -1,8 +1,9 @@
+from rest_framework.exceptions import PermissionDenied
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.viewsets import ModelViewSet
 
 from chats.models import Conversation, Message
-from chats.permissions import IsOwnerOrReadOnly, IsParticipant
+from chats.permissions import IsOwnerOrReadOnly, IsParticipant, IsConversationParticipant
 from chats.serializers import ConversationSerializer, MessageSerializer
 
 
@@ -15,8 +16,17 @@ class ConversationViewSet(ModelViewSet):
     }
     status = ''
 
-    permission_classes = [IsAuthenticated, IsParticipant]
+    permission_classes = [IsAuthenticated, IsConversationParticipant]
 
+    def get_queryset(self):
+        conversation_id = self.kwargs.get('conversation_id')
+        if conversation_id:
+            conversation = Conversation.objects.filter(id=conversation_id).first()
+            if conversation and self.request.user in conversation.participants.all():
+                return Message.objects.filter(conversation=conversation)
+            else:
+                raise PermissionDenied("You are not a participant of this conversation.")
+        return Message.objects.none()
 
 
 class MessageViewSet(ModelViewSet):
