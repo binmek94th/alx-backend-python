@@ -37,7 +37,13 @@ class ConversationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Conversation
         fields = '__all__'
-        read_only_fields = ['conversation_id']
+        read_only_fields = ['conversation_id', 'participants']
+
+    def create(self, validated_data):
+        user = self.context['request'].user
+        conversation = Conversation.objects.create()
+        conversation.participants.set([user])
+        return conversation
 
 
 class MessageSerializer(serializers.ModelSerializer):
