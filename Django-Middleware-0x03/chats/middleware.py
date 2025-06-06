@@ -1,7 +1,5 @@
 from datetime import datetime
 
-from messaging_app.settings import BASE_DIR
-
 
 class RequestLoggingMiddleware:
     def __init__(self, get_response):
@@ -10,7 +8,7 @@ class RequestLoggingMiddleware:
     def __call__(self, request):
         user = request.user.username if request.user.is_authenticated else 'Anonymous'
 
-        open(f"request_log.txt", 'a').write(
+        open(f"requests.txt", 'a').write(
             f"{datetime.now().isoformat()} - User: {user}, Path: {request.path}\n"
         )
 
