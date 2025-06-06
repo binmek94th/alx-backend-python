@@ -52,6 +52,19 @@ class OffensiveLanguageMiddleware:
             cache.set(cache_key, count + 1, timeout=3600)
 
 
+class RolepermissionMiddleware:
+    def __init__(self, get_response):
+        self.get_response = get_response
+
+    def __call__(self, request):
+        if request.method == 'POST':
+            user = request.user
+            if not user.is_authenticated and not user.is_admin:
+                raise PermissionDenied('You do not have permission to perform this action.')
+        response = self.get_response(request)
+        return response
+
+
 def get_client_ip(request):
     x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
     if x_forwarded_for:
