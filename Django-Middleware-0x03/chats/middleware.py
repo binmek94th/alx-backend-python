@@ -8,7 +8,7 @@ class RequestLoggingMiddleware:
     def __call__(self, request):
         user = request.user.username if request.user.is_authenticated else 'Anonymous'
 
-        open(f"requests.txt", 'a').write(
+        open(f"requests.log", 'a').write(
             f"{datetime.now().isoformat()} - User: {user}, Path: {request.path}\n"
         )
 
