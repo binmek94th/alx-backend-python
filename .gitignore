@@ -4,3 +4,4 @@ messaging_app/messaging_app/__pycache__/
 messaging_app/.idea
 messaging_app/chats/__pycache__
 0x03-Unittests_and_integration_tests/__pycache__
+messaging_app/chats/migrations/__pycache__/
