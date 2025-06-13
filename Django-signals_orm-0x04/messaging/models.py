@@ -19,6 +19,8 @@ class Message(models.Model):
     timestamp = models.DateTimeField(auto_now_add=True)
     content = models.TextField()
     edited = models.BooleanField(default=False)
+    edited_by = models.ForeignKey(User, on_delete=models.DO_NOTHING, related_name='message_editor', null=True)
+    edited_at = models.DateTimeField(null=True)
 
 
 class Notification(models.Model):
