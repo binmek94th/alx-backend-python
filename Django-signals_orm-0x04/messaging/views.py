@@ -1,3 +1,4 @@
+from django.views.decorators.cache import cache_page
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -30,6 +31,7 @@ class MessageViewSet(ModelViewSet):
         return queryset.filter(receiver=request.user)
 
 
+@cache_page(60)
 @api_view(["GET"])
 def unread_messages_view(request):
     user = request.user
