@@ -32,6 +32,6 @@ class MessageViewSet(ModelViewSet):
 @api_view(["GET"])
 def unread_messages_view(request):
     user = request.user
-    unread = Message.unread.for_user(user)
+    unread = Message.unread.unread_for_user(user)
     data = [{"id": m.id, "sender": m.sender.id, "content": m.content, "created_at": m.created_at} for m in unread]
     return Response(data)
