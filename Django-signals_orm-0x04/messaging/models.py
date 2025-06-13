@@ -14,22 +14,22 @@ class User(AbstractUser):
 
 class Message(models.Model):
     message_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    sender = models.ForeignKey(User, on_delete=models.DO_NOTHING, related_name='message_sender')
-    receiver = models.ForeignKey(User, on_delete=models.DO_NOTHING, related_name='message_reciver')
+    sender = models.ForeignKey(User, on_delete=models.CASCADE, related_name='message_sender')
+    receiver = models.ForeignKey(User, on_delete=models.CASCADE, related_name='message_reciver')
     timestamp = models.DateTimeField(auto_now_add=True)
     content = models.TextField()
     edited = models.BooleanField(default=False)
-    edited_by = models.ForeignKey(User, on_delete=models.DO_NOTHING, related_name='message_editor', null=True)
+    edited_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='message_editor', null=True)
     edited_at = models.DateTimeField(null=True)
 
 
 class Notification(models.Model):
     notification_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    message = models.ForeignKey(Message, on_delete=models.DO_NOTHING)
-    user = models.ForeignKey(User, on_delete=models.DO_NOTHING)
+    message = models.ForeignKey(Message, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
 
 
 class MessageHistory(models.Model):
     history_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    message = models.ForeignKey(Message, on_delete=models.DO_NOTHING, related_name='message_history')
+    message = models.ForeignKey(Message, on_delete=models.CASCADE, related_name='message_history')
     

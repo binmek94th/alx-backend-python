@@ -1,7 +1,7 @@
 from django.urls import path
 
-from messaging.views import UserAPiView
+from messaging.views import delete_user
 
 urlpatterns = [
-    path('user/', UserAPiView.as_view(), name='user-api'),
+    path('user/', delete_user.as_view(), name='user-api'),
 ]

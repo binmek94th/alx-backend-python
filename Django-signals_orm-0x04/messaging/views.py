@@ -2,7 +2,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 
-class UserAPiView(APIView):
+class delete_user(APIView):
     def delete(self, request):
         user = request.user
         if not user:
