@@ -18,9 +18,16 @@ class Message(models.Model):
     receiver = models.ForeignKey(User, on_delete=models.DO_NOTHING, related_name='message_reciver')
     timestamp = models.DateTimeField(auto_now_add=True)
     content = models.TextField()
+    edited = models.BooleanField(default=False)
 
 
 class Notification(models.Model):
     notification_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     message = models.ForeignKey(Message, on_delete=models.DO_NOTHING)
     user = models.ForeignKey(User, on_delete=models.DO_NOTHING)
+
+
+class MessageHistory(models.Model):
+    history_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    message = models.ForeignKey(Message, on_delete=models.DO_NOTHING, related_name='message_history')
+    
