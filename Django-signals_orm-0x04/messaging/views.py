@@ -23,5 +23,6 @@ class MessageViewSet(ModelViewSet):
 
     def get_queryset(self):
         request = self.request
-        queryset = Message.objects.select_related('sender', 'receiver').filter(sender=request.user)
+        queryset = Message.objects.select_related('sender', 'receiver')
+        queryset = Message.objects.filter(sender=request.user)
         return queryset.filter(receiver=request.user)
