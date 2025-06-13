@@ -2,7 +2,7 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 import uuid
 
-from messaging.managers import UnreadMessagesManager
+from messaging.views import UnreadMessagesManager
 
 
 class User(AbstractUser):

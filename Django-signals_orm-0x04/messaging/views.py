@@ -2,6 +2,7 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
+from django.db import models
 
 from messaging.models import Message
 from messaging.serializers import MessageSerializer
@@ -26,7 +27,7 @@ class MessageViewSet(ModelViewSet):
         request = self.request
         Message.objects.select_related('sender', 'receiver')
         queryset = Message.objects.filter(sender=request.user)
-        return queryset.filter(receiver=request.user).only('sender', 'receiver')
+        return queryset.filter(receiver=request.user)
 
 
 @api_view(["GET"])
@@ -35,3 +36,12 @@ def unread_messages_view(request):
     unread = Message.unread.unread_for_user(user)
     data = [{"id": m.id, "sender": m.sender.id, "content": m.content, "created_at": m.created_at} for m in unread]
     return Response(data)
+
+class UnreadMessagesManager(models.Manager):
+    def unread_for_user(self, user):
+        return (
+            super()
+            .get_queryset()
+            .filter(receiver=user, read=False)
+            .only('id', 'sender', 'content', 'created_at')
+        )
