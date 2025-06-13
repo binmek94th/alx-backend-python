@@ -2,6 +2,9 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 import uuid
 
+from messaging.managers import UnreadMessagesManager
+
+
 class User(AbstractUser):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     password = models.CharField(max_length=128, null=True, blank=True)
@@ -22,6 +25,11 @@ class Message(models.Model):
     edited_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='message_editor', null=True)
     edited_at = models.DateTimeField(null=True)
     parent_message = models.ForeignKey('self', on_delete=models.CASCADE, related_name='children', null=True)
+    read = models.BooleanField(default=False)
+
+    objects = models.Manager()
+    unread = UnreadMessagesManager()
+
 
 
 class Notification(models.Model):

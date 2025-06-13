@@ -1,3 +1,4 @@
+from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
@@ -23,6 +24,14 @@ class MessageViewSet(ModelViewSet):
 
     def get_queryset(self):
         request = self.request
-        queryset = Message.objects.select_related('sender', 'receiver')
+        Message.objects.select_related('sender', 'receiver')
         queryset = Message.objects.filter(sender=request.user)
         return queryset.filter(receiver=request.user)
+
+
+@api_view(["GET"])
+def unread_messages_view(request):
+    user = request.user
+    unread = Message.unread.for_user(user)
+    data = [{"id": m.id, "sender": m.sender.id, "content": m.content, "created_at": m.created_at} for m in unread]
+    return Response(data)
