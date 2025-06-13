@@ -21,6 +21,7 @@ class Message(models.Model):
     edited = models.BooleanField(default=False)
     edited_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='message_editor', null=True)
     edited_at = models.DateTimeField(null=True)
+    parent_message = models.ForeignKey('self', on_delete=models.CASCADE, related_name='children', null=True)
 
 
 class Notification(models.Model):
