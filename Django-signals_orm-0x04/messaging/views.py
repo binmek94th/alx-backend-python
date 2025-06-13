@@ -1,11 +1,13 @@
-from messaging.models import Message
-from django.contrib.auth import get_user_model
-
-def create_message():
-    User = get_user_model()
-
-    user = User.objects.first()
-    Message.objects.create(receiver=user, sender=user, content='dslkjflasdjflsadjlfsaj')
+from rest_framework.response import Response
+from rest_framework.views import APIView
 
 
-create_message()
+class UserAPiView(APIView):
+    def delete(self, request):
+        user = request.user
+        if not user:
+            return Response({"error": "User not found."}, status=404)
+        if not user.is_authenticated:
+            return Response({"error": "User not authenticated."}, status=401)
+        user.delete()
+        return Response({"message": "User account deleted successfully."}, status=204)
