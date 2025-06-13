@@ -26,7 +26,7 @@ class MessageViewSet(ModelViewSet):
         request = self.request
         Message.objects.select_related('sender', 'receiver')
         queryset = Message.objects.filter(sender=request.user)
-        return queryset.filter(receiver=request.user)
+        return queryset.filter(receiver=request.user).only('sender', 'receiver')
 
 
 @api_view(["GET"])
