@@ -22,7 +22,6 @@ class MessageViewSet(ModelViewSet):
     serializer_class = MessageSerializer
 
     def get_queryset(self):
-        user = self.request.user
-        if user.is_authenticated:
-            return (Message.objects.filter(sender=user) | Message.objects.filter(receiver=user)).distinct()
-        return Message.objects.none()
+        request = self.request
+        queryset = Message.objects.select_related('sender', 'receiver').filter(sender=request.user)
+        return queryset.filter(receiver=request.user)
