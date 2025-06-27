@@ -3,11 +3,18 @@ FROM python:3.10
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 
+# Update apt and install system dependencies needed by mysqlclient
+RUN apt-get update && \
+    apt-get install -y gcc default-libmysqlclient-dev && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
 WORKDIR /app
 
 COPY requirements.txt /app/
 
-RUN pip install -r requirements.txt
+# Use --no-cache-dir to avoid caching pip packages inside the image
+RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . /app/
 
