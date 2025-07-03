@@ -1,0 +1,55 @@
+pipeline {
+    agent any
+
+    environment {
+        GITHUB_CREDENTIALS = credentials('github-creds-id')
+        VENV_DIR = 'venv'
+    }
+
+    stages {
+        stage('Clone Repository') {
+            steps {
+                git credentialsId: "${env.GITHUB_CREDENTIALS}", url: 'https://github.com/binmek94th/messaging_app.git', branch: 'main'
+            }
+        }
+
+        stage('Set Up Python Environment') {
+            steps {
+                sh '''
+                    python3 -m venv ${VENV_DIR}
+                    . ${VENV_DIR}/bin/activate
+                    pip install --upgrade pip
+                    pip install -r requirements.txt
+                '''
+            }
+        }
+
+        stage('Run Tests') {
+            steps {
+                sh '''
+                    . ${VENV_DIR}/bin/activate
+                    pytest --junitxml=report.xml
+                '''
+            }
+        }
+
+        stage('Publish Test Report') {
+            steps {
+                junit 'report.xml'
+            }
+        }
+    }
+
+    post {
+        always {
+            echo 'Cleaning up...'
+            deleteDir()
+        }
+        success {
+            echo 'Build and tests completed successfully!'
+        }
+        failure {
+            echo 'Build failed.'
+        }
+    }
+}
